@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from './artworkSlice';
+import { favouritesSlice } from '@/redux/favouritesSlice';
 
 export const store = configureStore({
     reducer: {
-        artwork: artworkSlice.reducer
+        artwork: artworkSlice.reducer,
+        favourites: favouritesSlice.reducer
     }
 });
 

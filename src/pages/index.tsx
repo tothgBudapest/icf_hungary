@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { Container, Stack, Grid, Typography, Paper } from '@mui/material';
 import MonaLisaIcon from '@/components/MonaLisaIcon';
 import SearchArtwork from '@/components/searchArtwork';
-import styled from 'styled-components';
 
 export default function Home() {
     return (

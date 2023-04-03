@@ -3,6 +3,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useState, useEffect } from 'react';
 import ArtworkCard from '@/components/artworkCard';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useRouter } from 'next/router';
 import {
     searchArtworks,
     selectArtworkData,
@@ -15,24 +17,9 @@ import {
 } from '@/redux/artworkSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [value, delay]);
-
-    return debouncedValue;
-};
-
 const SearchArtworks = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const artworks = useSelector(selectArtworkData);
     const status = useSelector(selectArtworkStatus);
     const currentPage = useSelector(selectArtworkCurrentPage);
@@ -65,6 +52,13 @@ const SearchArtworks = () => {
         setSearchQuery(query);
     };
 
+    const openDetailsPage = (id: number) => {
+        router.push({
+            pathname: '/artwork/[id]',
+            query: { id }
+        });
+    };
+
     return (
         <Grid container direction="column" justifyContent="center" spacing={2} alignItems="center">
             <Grid item container xs={4} direction="row" justifyContent="space-around" alignItems="center">
@@ -79,11 +73,14 @@ const SearchArtworks = () => {
                     <Button id="artwork_search_button" variant="text">
                         <SearchIcon />
                     </Button>
+                    <Button variant={'text'} onClick={() => router.push({ pathname: '/favourites' })}>
+                        Favourites
+                    </Button>
                 </Box>
                 <Pagination count={totalPages} page={currentPage} onChange={handleChange} />
                 <ToggleButtonGroup
                     sx={{ height: '25px' }}
-                    color="secondary"
+                    color="primary"
                     value={pageSize}
                     exclusive
                     onChange={handlePageSizeChange}
@@ -111,7 +108,7 @@ const SearchArtworks = () => {
                 {status === 'succeeded' &&
                     artworks.map((artwork: any) => (
                         <Grid key={'artwork_' + artwork?.id} item>
-                            <ArtworkCard artwork={artwork} />
+                            <ArtworkCard callback={openDetailsPage} artwork={artwork} />
                         </Grid>
                     ))}
             </Grid>

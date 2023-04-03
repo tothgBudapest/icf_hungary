@@ -2,12 +2,15 @@ export interface Artwork {
     id: number;
     title: string;
     artist_display: string;
+    isFavorite: boolean;
+    image_id: string;
     thumbnail_url: string;
     api_link: string;
     is_public_domain: boolean;
     classification_title: string;
     date_display: string;
     place_of_origin: string;
+    dimensions: string;
     medium_display: string;
 }
 
@@ -42,4 +45,12 @@ export interface FetchArtworksResponse {
 export interface FetchArtworksRequest {
     currentPage: number;
     searchQuery: string;
+}
+
+export interface FetchArtworkRequest {
+    artworkId: string;
+}
+
+export interface FetchArtworkResponse {
+    data: Artwork;
 }
